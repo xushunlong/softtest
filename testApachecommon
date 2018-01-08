@@ -1,0 +1,134 @@
+package Emailwrite;
+
+import java.util.List;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.lang.StringUtils;
+  
+public class ex0 { 
+  /**
+   * <pre>
+   * 
+   * Our first example will create a basic email message to "John Doe" and
+   * send it through your Google Mail (GMail) account.
+   * 
+   * The call to setHostName("mail.myserver.com") sets the address of the outgoing SMTP
+   * server that will be used to send the message. If this is not set, the
+   * system property "mail.host" will be used.
+   * 
+   * </pre>
+   * 
+   * @describe 发送内容为简单文本的邮件
+   * @throws EmailException
+   */
+	
+	public static HtmlEmail init() throws EmailException {
+		HtmlEmail email = new HtmlEmail();
+		email.setHostName("smtp.163.com");
+	    email.setAuthentication("sunnybabyupup@163.com", "3822398");//邮件服务器验证：用户名/密码
+	    email.setCharset("UTF-8");// 必须放在前面，否则乱码
+	    email.setFrom("sunnybabyupup@163.com", "sunnybabyupup");
+	    email.addTo("1061407277@qq.com");
+//	    List addrlist = addaddr();
+//	    for(int i=0; i<addrlist.size(); i++) {
+//	    	email.addTo((String) addrlist.get(i));
+//	    }
+//		return email;
+//	    
+		return email;
+	}
+	
+	//添加收件人
+	public static List addaddr() {
+		List<String> list = new ArrayList<>();
+		Scanner scan = new Scanner(System.in);
+		while(true) {
+			String addr = scan.nextLine();
+			if(StringUtils.isBlank(addr)) {
+				break;
+			}
+			list.add(addr);
+		}
+		return list;
+	}
+	
+	//写主题、内容
+	public static String subject() {
+		String sub = new String();
+		Scanner scan = new Scanner(System.in);
+		sub = scan.nextLine();
+		return sub;
+	}
+	
+	//简单文本发送
+	public static int sendsimplemail() throws EmailException {
+	    try {
+			HtmlEmail email = init();
+		    email.setSubject("subject中文");
+		    email.setMsg("msg中文");
+		    email.send();
+		    return 1;
+	    }
+	    catch (EmailException e) {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+	}
+	
+	//带附件的邮件
+	public static int sendmultipartemail() throws EmailException {
+		try {
+			HtmlEmail email = init();
+		    email.setSubject("subject中文");
+		    email.setMsg("msg中文");
+		    EmailAttachment attachment = new EmailAttachment();
+		    attachment.setPath("E:\\Blizzard App\\Battle.net Launcher.exe");// 本地文件
+		
+		    attachment.setDisposition(EmailAttachment.ATTACHMENT);
+		    attachment.setDescription("a");
+		    attachment.setName("a");
+		    
+		    email.attach(attachment);
+		    email.send();
+		    return 1;
+		}
+	    catch (EmailException e) {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+	
+	}
+	
+ 	public static int sendhtmlemail() throws EmailException {
+ 		try {
+	 		HtmlEmail email = init();
+	 		String mysubject = subject();
+	 		email.setSubject(mysubject);
+	 		String mes = subject();
+	 	    email.setHtmlMsg(mes);
+	 	    email.send();
+	 	    return 1;
+ 			}
+ 		    catch (EmailException e) {
+ 	            System.out.println(e.getMessage());
+ 	            return 0;
+ 	        }
+ 	}
+ 
+	/**
+	 * @param args
+	 * @throws EmailException
+	 * @throws MalformedURLException
+	 */
+	public static void main(String[] args) throws EmailException, MalformedURLException {
+		ex0 email = new ex0();
+		//email.sendmultipartemail();
+		email.sendsimplemail();
+		//email.sendhtmlemail();
+	 }
+ }
